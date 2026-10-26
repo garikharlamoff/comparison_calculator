@@ -1,0 +1,586 @@
+/* ============================================================
+   PREMIUM GLASSMORPHISM CALCULATOR
+   Ultra-detailed modern design with micro-interactions
+   ============================================================ */
+
+/* ---------- CSS Variables ---------- */
+:root {
+    --bg-deep: #0a0a12;
+    --bg-mid: #12121f;
+    --accent-primary: #7c5cff;
+    --accent-secondary: #00d4ff;
+    --accent-glow: rgba(124, 92, 255, 0.45);
+    --accent-cyan-glow: rgba(0, 212, 255, 0.35);
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.09);
+    --glass-highlight: rgba(255, 255, 255, 0.12);
+    --text-primary: #f0f0f8;
+    --text-secondary: #a0a0b8;
+    --text-muted: #6a6a80;
+    --success: #00e6a0;
+    --danger: #ff4d6d;
+    --shadow-deep: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    --radius-lg: 24px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --font-main: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+}
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-main);
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    position: relative;
+    padding: 24px;
+}
+
+/* ---------- Animated Nebula Background ---------- */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(124, 92, 255, 0.18) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 50% at 80% 70%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180, 80, 255, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 10% 90%, rgba(0, 180, 255, 0.1) 0%, transparent 40%),
+        linear-gradient(160deg, #0a0a12 0%, #0f0f1a 40%, #12121f 100%);
+    z-index: -2;
+    animation: nebulaPulse 18s ease-in-out infinite alternate;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(1.5px 1.5px at 20px 30px, rgba(255, 255, 255, 0.35), transparent),
+        radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.25), transparent),
+        radial-gradient(1.5px 1.5px at 90px 40px, rgba(255, 255, 255, 0.3), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(1.5px 1.5px at 160px 30px, rgba(255, 255, 255, 0.28), transparent),
+        radial-gradient(1px 1px at 200px 90px, rgba(255, 255, 255, 0.22), transparent),
+        radial-gradient(1.5px 1.5px at 250px 50px, rgba(255, 255, 255, 0.3), transparent),
+        radial-gradient(1px 1px at 300px 20px, rgba(255, 255, 255, 0.18), transparent),
+        radial-gradient(1.5px 1.5px at 350px 70px, rgba(255, 255, 255, 0.25), transparent),
+        radial-gradient(1px 1px at 400px 40px, rgba(255, 255, 255, 0.2), transparent);
+    background-size: 450px 120px;
+    opacity: 0.6;
+    z-index: -1;
+    animation: starsDrift 120s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes nebulaPulse {
+    0% {
+        filter: hue-rotate(0deg) brightness(1);
+        transform: scale(1);
+    }
+    50% {
+        filter: hue-rotate(15deg) brightness(1.05);
+        transform: scale(1.02);
+    }
+    100% {
+        filter: hue-rotate(-10deg) brightness(0.98);
+        transform: scale(1);
+    }
+}
+
+@keyframes starsDrift {
+    from { background-position: 0 0; }
+    to { background-position: 450px 120px; }
+}
+
+/* ---------- Calculator Card ---------- */
+body > div:first-of-type {
+    width: 100%;
+    max-width: 380px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px 20px;
+    box-shadow:
+        var(--shadow-deep),
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    position: relative;
+    overflow: hidden;
+    animation: cardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Subtle top highlight line */
+body > div:first-of-type::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+    border-radius: 1px;
+}
+
+/* Soft inner glow */
+body > div:first-of-type::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at 30% 20%,
+        rgba(124, 92, 255, 0.07) 0%,
+        transparent 45%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ---------- Inputs Container ---------- */
+body > div:first-of-type {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Individual input wrappers feel */
+#input1,
+#input2 {
+    width: 100%;
+    height: 56px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 0 20px;
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+    outline: none;
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast),
+        transform var(--transition-fast);
+    position: relative;
+    z-index: 1;
+    caret-color: var(--accent-secondary);
+}
+
+#input1::placeholder,
+#input2::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+#input1:hover,
+#input2:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+#input1:focus,
+#input2:focus {
+    border-color: var(--accent-primary);
+    background: rgba(0, 0, 0, 0.45);
+    box-shadow:
+        0 0 0 3px var(--accent-glow),
+        0 4px 16px rgba(124, 92, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Number input spinners hide for cleaner look */
+#input1::-webkit-outer-spin-button,
+#input1::-webkit-inner-spin-button,
+#input2::-webkit-outer-spin-button,
+#input2::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#input1,
+#input2 {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* ---------- Result Display ---------- */
+#result {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 12px 20px;
+    margin-top: 4px;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(20, 20, 35, 0.6) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: var(--accent-secondary);
+    letter-spacing: 0.03em;
+    text-shadow: 0 0 20px var(--accent-cyan-glow);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: color var(--transition-smooth), text-shadow var(--transition-smooth);
+}
+
+/* Result empty state */
+#result:empty::before {
+    content: '0';
+    color: var(--text-muted);
+    text-shadow: none;
+    opacity: 0.5;
+}
+
+/* Subtle scanning line effect on result */
+#result::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 212, 255, 0.08),
+        transparent
+    );
+    animation: resultScan 4.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes resultScan {
+    0%, 100% { left: -100%; }
+    50% { left: 140%; }
+}
+
+/* ---------- Operators Container ---------- */
+body > div:last-of-type {
+    width: 100%;
+    max-width: 380px;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    animation: buttonsEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes buttonsEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- Operator Buttons ---------- */
+.operator-button {
+    position: relative;
+    height: 64px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-main);
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        filter var(--transition-fast);
+    z-index: 1;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+/* Individual button color schemes */
+.operator-button:nth-child(1) {
+    /* + */
+    background: linear-gradient(145deg, #2a2a45 0%, #1e1e32 100%);
+    box-shadow:
+        0 4px 0 #151525,
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.operator-button:nth-child(2) {
+    /* - */
+    background: linear-gradient(145deg, #2a2a45 0%, #1e1e32 100%);
+    box-shadow:
+        0 4px 0 #151525,
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.operator-button:nth-child(3) {
+    /* * */
+    background: linear-gradient(145deg, #2a2a45 0%, #1e1e32 100%);
+    box-shadow:
+        0 4px 0 #151525,
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.operator-button:nth-child(4) {
+    /* / */
+    background: linear-gradient(145deg, #2a2a45 0%, #1e1e32 100%);
+    box-shadow:
+        0 4px 0 #151525,
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Hover state – lift + colored glow */
+.operator-button:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.15);
+}
+
+.operator-button:nth-child(1):hover {
+    box-shadow:
+        0 7px 0 #151525,
+        0 12px 28px rgba(124, 92, 255, 0.35),
+        0 0 20px rgba(124, 92, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    color: #c4b5ff;
+}
+
+.operator-button:nth-child(2):hover {
+    box-shadow:
+        0 7px 0 #151525,
+        0 12px 28px rgba(255, 100, 130, 0.3),
+        0 0 20px rgba(255, 100, 130, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    color: #ffb3c1;
+}
+
+.operator-button:nth-child(3):hover {
+    box-shadow:
+        0 7px 0 #151525,
+        0 12px 28px rgba(0, 212, 255, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    color: #7aecff;
+}
+
+.operator-button:nth-child(4):hover {
+    box-shadow:
+        0 7px 0 #151525,
+        0 12px 28px rgba(0, 230, 160, 0.3),
+        0 0 20px rgba(0, 230, 160, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    color: #7affc8;
+}
+
+/* Active / pressed state */
+.operator-button:active {
+    transform: translateY(2px);
+    filter: brightness(0.95);
+    transition-duration: 0.08s;
+}
+
+.operator-button:nth-child(1):active,
+.operator-button:nth-child(2):active,
+.operator-button:nth-child(3):active,
+.operator-button:nth-child(4):active {
+    box-shadow:
+        0 1px 0 #151525,
+        0 3px 10px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Shine sweep on hover */
+.operator-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.12),
+        transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+    pointer-events: none;
+}
+
+.operator-button:hover::before {
+    left: 140%;
+}
+
+/* Soft top edge highlight */
+.operator-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.22),
+        transparent
+    );
+    border-radius: 1px;
+    pointer-events: none;
+}
+
+/* ---------- Focus visible for accessibility ---------- */
+.operator-button:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 3px;
+}
+
+#input1:focus-visible,
+#input2:focus-visible {
+    outline: none; /* already handled by custom focus */
+}
+
+/* ---------- Responsive refinements ---------- */
+@media (max-width: 420px) {
+    body {
+        padding: 16px;
+    }
+
+    body > div:first-of-type {
+        padding: 24px 20px 16px;
+        border-radius: 20px;
+    }
+
+    #input1,
+    #input2 {
+        height: 52px;
+        font-size: 1.25rem;
+        padding: 0 16px;
+    }
+
+    #result {
+        min-height: 56px;
+        font-size: 1.6rem;
+        padding: 10px 16px;
+    }
+
+    body > div:last-of-type {
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    .operator-button {
+        height: 58px;
+        font-size: 1.5rem;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 340px) {
+    body > div:last-of-type {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .operator-button {
+        height: 54px;
+    }
+}
+
+/* ---------- Reduced motion preference ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    body::before,
+    body::after,
+    #result::after {
+        animation: none !important;
+    }
+}
+
+/* ---------- Selection styling ---------- */
+::selection {
+    background: rgba(124, 92, 255, 0.4);
+    color: #fff;
+}
+
+/* ---------- Scrollbar (for any overflow) ---------- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
